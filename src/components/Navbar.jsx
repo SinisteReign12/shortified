@@ -28,7 +28,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center justify-center md:justify-end gap-4 w-full md:w-auto">
 
           <Link href="/" className="no-underline hover:underline underline-offset-4">
             Home
@@ -52,13 +52,13 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <span className="text-sm">
+              <span className="text-sm break-all text-center md:text-left max-w-[180px] md:max-w-none">
                 {session.user.email}
               </span>
 
               <button
                 onClick={() => signOut()}
-                className="bg-white text-black font-semibold px-4 py-1.5 rounded-lg transition-all duration-200 cursor-pointer hover:bg-zinc-200 hover:scale-[1.02]"
+                className="bg-white text-black font-semibold px-4 py-2 rounded-lg whitespace-nowrap transition-all duration-200 cursor-pointer hover:bg-zinc-200 hover:scale-[1.02]"
               >
                 Logout
               </button>
