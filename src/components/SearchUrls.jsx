@@ -162,7 +162,7 @@ export default function SearchUrls({ urls }) {
           <div className="overflow-x-auto mt-4">
 
             <QRCodeCard
-              value={`http://localhost:3000/${url.shortCode}`}
+              value={`https://shortified.vercel.app/${url.shortCode}`}
             />
 
           </div>

@@ -69,7 +69,6 @@ export default async function Dashboard() {
         </h1>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6  shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
@@ -125,7 +124,7 @@ export default async function Dashboard() {
       </div>
 
       <ClicksChart data={chartData} />
-      {/* Most Popular URL */}
+
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 mb-8 shadow">
         <h2 className="text-xl font-bold mb-2">
           Most Popular URL
@@ -148,83 +147,10 @@ export default async function Dashboard() {
         )}
       </div>
 
-      {/* All URLs */}
-
       <SearchUrls
         urls={serializedUrls}
       />
-
-      {/* <div>
-        <h2 className="text-2xl font-bold mb-4">
-          All URLs
-        </h2>
-
-        {urls.map((url) => (
-          <div
-            key={url._id}
-            className="border rounded-lg p-4 mb-4 shadow"
-          >
-            <p className="break-all">
-              <strong>Original URL:</strong>{" "}
-              {url.originalUrl}
-            </p>
-
-            <p>
-              <strong>Short Code:</strong>{" "}
-              {url.shortCode}
-            </p>
-
-            <p>
-              <strong>Clicks:</strong>{" "}
-              {url.clicks}
-            </p>
-
-            <p>
-              <strong>Expires:</strong>{" "}
-              {url.expiresAt
-                ? new Date(
-                  url.expiresAt
-                ).toLocaleDateString()
-                : "Never"}
-            </p>
-
-            <div className="mt-2">
-
-              {url.expiresAt &&
-                new Date() >
-                new Date(url.expiresAt) ? (
-
-                <span className="bg-red-900 text-red-300 border border-red-700 px-3 py-1 rounded-full text-sm">
-                  🔴 Expired
-                </span>
-
-              ) : (
-
-                <span className="bg-green-900 text-green-300 border border-green-700 px-3 py-1 rounded-full text-sm">
-                  🟢 Active
-                </span>
-
-              )}
-
-            </div>
-
-            <div className="mt-3 flex flex-col sm:flex-row gap-2">
-              <EditAliasButton
-                id={url._id.toString()}
-              />
-
-              <DeleteButton
-                id={url._id.toString()}
-              />
-            </div>
-            <div className="overflow-x-auto">
-              <QRCodeCard
-                value={`http://localhost:3000/${url.shortCode}`}
-              />
-            </div>
-          </div>
-        ))}
-      </div> */}
+      
     </div>
   );
 }
