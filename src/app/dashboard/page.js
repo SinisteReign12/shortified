@@ -2,15 +2,10 @@ import { connectDB } from "@/lib/mongodb";
 import Url from "@/models/Url";
 import Analytics from "@/models/Analytics";
 import ClicksChart from "@/components/ClicksChart";
-import QRCodeCard from "@/components/QRCodeCard";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-import LogoutButton from "@/components/LogoutButton";
-import DeleteButton from "@/components/DeleteButton";
-import EditAliasButton from "@/components/EditAliasButton";
 import SearchUrls from "@/components/SearchUrls";
-import SkeletonCard from "@/components/SkeletonCard";
 
 export default async function Dashboard() {
 
@@ -22,11 +17,11 @@ export default async function Dashboard() {
 
   await connectDB();
 
-  const urls = await Url.find({
-    userId: session.user.id,
-  });
+  const urls = await Url.find({ userId: session.user.id })
+    .select("originalUrl shortCode clicks expiresAt createdAt")
+    .lean();
 
-  const analytics = await Analytics.find();
+  const analyticsCount = await Analytics.countDocuments();
 
   const totalUrls = urls.length;
 
@@ -47,18 +42,22 @@ export default async function Dashboard() {
       new Date() > new Date(url.expiresAt)
   ).length;
 
-  const topUrl = urls.sort(
-    (a, b) => b.clicks - a.clicks
-  )[0];
+  const topUrl = urls.reduce(
+    (top, url) => (!top || url.clicks > top.clicks ? url : top),
+    null
+  );
 
   const chartData = urls.map((url) => ({
     shortCode: url.shortCode,
     clicks: url.clicks,
   }));
 
-  const serializedUrls = JSON.parse(
-    JSON.stringify(urls)
-  );
+  const serializedUrls = urls.map((url) => ({
+    ...url,
+    _id: String(url._id),
+    createdAt: url.createdAt ? new Date(url.createdAt).toISOString() : null,
+    expiresAt: url.expiresAt ? new Date(url.expiresAt).toISOString() : null,
+  }));
 
   return (
     <div className="p-4 md:p-10">
@@ -117,7 +116,7 @@ export default async function Dashboard() {
           </h2>
 
           <p className="text-3xl font-bold mt-2">
-            {analytics.length}
+            {analyticsCount}
           </p>
         </div>
 
@@ -150,7 +149,7 @@ export default async function Dashboard() {
       <SearchUrls
         urls={serializedUrls}
       />
-      
+
     </div>
   );
 }
