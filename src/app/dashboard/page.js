@@ -17,11 +17,12 @@ export default async function Dashboard() {
 
   await connectDB();
 
-  const urls = await Url.find({ userId: session.user.id })
-    .select("originalUrl shortCode clicks expiresAt createdAt")
-    .lean();
-
-  const analyticsCount = await Analytics.countDocuments();
+  const [urls, analyticsCount] = await Promise.all([
+    Url.find({ userId: session.user.id })
+      .select("originalUrl shortCode clicks expiresAt createdAt")
+      .lean(),
+    Analytics.countDocuments(),
+  ]);
 
   const totalUrls = urls.length;
 
